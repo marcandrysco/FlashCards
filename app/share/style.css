@@ -1,0 +1,256 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  color: #111;
+  width: 100%;
+  height: 100%;
+  font-family: "Noto Sans", sans-serif;
+  margin: 0;
+}
+
+#page {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  padding: 20px 0;
+}
+
+#page.prac {
+  background-color: #f4f4f4;
+}
+
+  #page.prac > .card {
+    margin: 0 auto;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    min-width: 400px;
+    max-width: 600px;
+    font-size: 20px;
+    padding: 8px 0;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+    #page.prac > .card > * {
+      position: relative;
+    }
+
+    #page.prac > .card > .prompt {
+      font-size: 28px;
+      text-align: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    #page.prac > .card > .eng {
+      padding: 8px 16px;
+    }
+
+    #page.prac > .card > .rom {
+      padding: 8px 16px;
+    }
+
+    #page.prac > .card > .hir {
+      padding: 8px 16px;
+      font-family: "Noto Sans CJK JP", sans-serif;
+    }
+
+    #page.prac > .card > .kanji {
+      padding: 8px 16px;
+      font-family: "Noto Sans CJK JP", sans-serif;
+    }
+
+    #page.prac > .card > .audio {
+      padding: 8px 12px;
+    }
+
+    #page.prac > .card > .actions {
+      padding: 8px 12px;
+      display: flex;
+    }
+
+      #page.prac > .card > .actions > .sep {
+        width: 8px;
+      }
+
+      #page.prac > .card > .actions > .space {
+        flex-grow: 1;
+      }
+
+#page.list {
+    display: flex;
+    flex-direction: column;
+}
+
+  #page.list > .card {
+    display: flex;
+    margin: 0 auto;
+    border-top: 1px solid #999;
+    border-left: 1px solid #999;
+    border-right: 1px solid #999;
+    height: 25px;
+    flex-shrink: 0;
+  }
+
+  #page.list > .card:nth-child(even) {
+    background-color: #f4f4f4;
+  }
+
+  #page.list > .card:last-child {
+    border-bottom: 1px solid #999;
+    height: 26px;
+  }
+
+    #page.list > .card > * {
+      padding: 2px 6px;
+      line-height: 20px;
+      font-size: 16px;
+    }
+
+    #page.list > .card > .score {
+      width: 90px;
+      border-right: 1px solid #999;
+    }
+
+      #page.list > .card > .score.new {
+        background-color: #f87;
+      }
+
+      #page.list > .card > .score.started {
+        background-color: #fb7;
+      }
+
+      #page.list > .card > .score.recognize {
+        background-color: #fd7;
+      }
+
+      #page.list > .card > .score.recall {
+        background-color: #df7;
+      }
+
+      #page.list > .card > .score.learned {
+        background-color: #7ed;
+      }
+
+      #page.list > .card > .score.mastered {
+        background-color: #79f;
+      }
+
+    #page.list > .card > .time {
+      width: 100px;
+      border-right: 1px solid #999;
+    }
+
+      #page.list > .card > .time.now {
+        background-color: #f87;
+      }
+
+      #page.list > .card > .time.sec {
+        background-color: #fb7;
+      }
+
+      #page.list > .card > .time.min {
+        background-color: #fd7;
+      }
+
+      #page.list > .card > .time.hour {
+        background-color: #df7;
+      }
+
+      #page.list > .card > .time.day {
+        background-color: #7ed;
+      }
+
+      #page.list > .card > .time.week {
+        background-color: #79f;
+      }
+
+    #page.list > .card > .eng {
+      width: 180px;
+    }
+
+    #page.list > .card > .rom {
+      width: 180px;
+    }
+
+    #page.list > .card > .hir {
+      width: 160px;
+      font-family: "Noto Sans CJK JP", sans-serif;
+    }
+
+    #page.list > .card > .kanji {
+      width: 160px;
+      font-family: "Noto Sans CJK JP", sans-serif;
+    }
+
+    #page.list > .card > .audio {
+      padding: 1px 6px;
+    }
+
+      #page.list > .card > .audio > button {
+        display: block;
+        height: 100%;
+        width: 28px;
+      }
+
+.hidden {
+  visibility: hidden;
+}
+
+button {
+  border-radius: 3px;
+  line-height: 1.5;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  padding: 4px 12px;
+  font-size: 16px;
+}
+
+  #page.list button {
+    font-size: 12px;
+    padding: 2px 4px;
+  }
+
+button.show {
+  color: #fff;
+  background-color: #5cb85c;
+  border-color: #5cb85c;
+}
+
+button.good {
+  color: #fff;
+  background-color: #5cb85c;
+  border-color: #5cb85c;
+}
+
+button.okay {
+  color: #fff;
+  background-color: #ebce14;
+  border-color: #ebce14;
+}
+
+button.bad {
+  color: #fff;
+  background-color: #f0ad4e;
+  border-color: #f0ad4e;
+}
+
+button.skip {
+  color: #fff;
+  background-color: #5bc0de;
+  border-color: #5bc0de;
+}
+
+button.zero {
+  color: #fff;
+  background-color: #d9534f;
+  border-color: #d9534f;
+}
