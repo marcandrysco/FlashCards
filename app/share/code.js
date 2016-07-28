@@ -7,24 +7,41 @@
   /* mode */
   window.App.mode = "none";
 
+  /* retrieve the score name */
+  window.App.score = function(num) {
+    switch(num) {
+    case 0: return "new"; break;
+    case 1: return "started"; break;
+    case 2: return "recognize"; break;
+    case 3: return "recall"; break;
+    case 4: return "learned"; break;
+    case 5: return "mastered"; break;
+    }
+    throw "Inavlid score";
+  };
+
   /* retrieve the next card */
   window.App.next = function() {
     Req.get(location.pathname + "/rand", function(resp) {
       var json = JSON.parse(resp);
       var card = Gui.div("card");
       var list = [ "eng", "rom", "hir", "kanji", "audio" ];
-      var show, actions, audio = null;
+      var space, show, actions, audio = null;
 
       var mk = function(el) {
         var div;
         if(el != "audio") {
           div = Gui.div(el, Gui.text(json[el]));
         } else {
-          audio = Gui.tag("audio");
-          audio.src = "/mp3/" + json.audio;
-          var play = Gui.tag("button", "play", Gui.text("Play"));
-          play.addEventListener("click", function() { audio.play(); });
-          div = Gui.div("audio", [audio, play]);
+          if(json.audio != "_") {
+            audio = Gui.tag("audio");
+            audio.src = "/mp3/" + json.audio;
+            var play = Gui.tag("button", "play", Gui.text("Play"));
+            play.addEventListener("click", function() { audio.play(); });
+            div = Gui.div("audio", [audio, play]);
+          } else {
+            div = Gui.div("audio", Gui.text("No audio"));
+          }
         }
         return div;
       };
@@ -40,6 +57,15 @@
         card.appendChild(el);
       });
 
+      var notes = Gui.tag("input", "notes");
+      notes.type = "text";
+      notes.placeholder = "Notes";
+      notes.autofocus = true;
+      notes.addEventListener("keyup", function(e) {
+        if(e.keyCode == 13) { show.click(); }
+      });
+      card.appendChild(notes);
+
       actions = Gui.div("actions");
       card.appendChild(actions);
 
@@ -49,49 +75,49 @@
           list.item(i).classList.remove("hidden");
         }
 
-        actions.insertBefore(Gui.button("good", "Good", function() {
-          Req.get(location.pathname + "/inc/" + json.id, function(resp) {
-            App.next();
-          });
-        }), show);
+        var req = function(verb) {
+          return function(e) {
+            Req.get(location.pathname + "/" + verb + "/" + json.id, function(resp) {
+              App.next();
+            });
+          };
+        };
 
+        actions.insertBefore(Gui.button("good", "Good", req("inc")), show);
         actions.insertBefore(Gui.div("sep"), show);
-
-        actions.insertBefore(Gui.button("okay", "Okay", function() {
-          Req.get(location.pathname + "/reset/" + json.id, function(resp) {
-            App.next();
-          });
-        }), show);
-
+        actions.insertBefore(Gui.button("okay", "Okay", req("reset")), show);
         actions.insertBefore(Gui.div("sep"), show);
-
-        actions.insertBefore(Gui.button("bad", "Bad", function() {
-          Req.get(location.pathname + "/dec/" + json.id, function(resp) {
-            App.next();
-          });
-        }), show);
-
+        actions.insertBefore(Gui.button("bad", "Bad", req("bad")), show);
         actions.insertBefore(Gui.div("sep"), show);
+        actions.insertBefore(Gui.button("zero", "Zero", req("zero")), show);
+        space.appendChild(Gui.div("score " + App.score(json.score), Gui.text(App.score(json.score))));
 
-        actions.insertBefore(Gui.button("zero", "Zero", function() {
-          Req.get(location.pathname + "/zero/" + json.id, function(resp) {
-            App.next();
+        if((App.mode != "audio") && (audio != null)) { audio.play(); }
+
+        var list = actions.getElementsByTagName("button");
+        for(var i = 0; i < list.length; i++) {
+          list.item(i).addEventListener("keyup", function(e) {
+            if(e.code == "KeyG") { req("inc")(); }
+            if(e.code == "KeyO") { req("reset")(); }
+            if(e.code == "KeyB") { req("dec")(); }
+            if(e.code == "KeyZ") { req("zero")(); }
+            if(e.code == "KeyS") { App.next(); }
           });
-        }), show);
-
-        if(App.mode != "audio") { audio.play(); }
+        }
 
         actions.removeChild(show);
         card.removeChild(query);
+        actions.firstChild.focus();
       }));
 
-      actions.appendChild(Gui.div("space"));
+      actions.appendChild(space = Gui.div("space"));
 
       actions.appendChild(Gui.button("skip", "Skip", function() {
         App.next();
       }));
 
       Gui.replace(Gui.byid("page"), card);
+      notes.focus();
     });
   };
 
